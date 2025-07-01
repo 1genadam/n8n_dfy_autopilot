@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: n8n_dfy_postgres
+    environment:
+      POSTGRES_DB: n8n_dfy_autopilot
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - dfy_network
+
+  # Redis for Caching and Queues
+  redis:
+    image: redis:7-alpine
+    container_name: n8n_dfy_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - dfy_network
+
+  # n8n Instance for Testing
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n_dfy_instance
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: true
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: n8n_password
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n_workflows
+      DB_POSTGRESDB_USER: admin
+      DB_POSTGRESDB_PASSWORD: postgres_password
+      N8N_ENCRYPTION_KEY: your_encryption_key_here
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n/workflows:/home/node/.n8n/workflows
+    depends_on:
+      - postgres
+    networks:
+      - dfy_network
+
+  # Main Application (will be built)
+  app:
+    build: .
+    container_name: n8n_dfy_app
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://admin:postgres_password@postgres:5432/n8n_dfy_autopilot
+      REDIS_URL: redis://redis:6379
+      N8N_HOST: http://n8n:5678
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+      - n8n
+    networks:
+      - dfy_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  n8n_data:
+
+networks:
+  dfy_network:
+    driver: bridge
