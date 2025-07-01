@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and API endpoints
+Disallow: /api/
+Disallow: /admin/
+Disallow: /uploads/
+Disallow: /logs/
+Disallow: /temp/
+
+# Allow CSS and JS files
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://n8n-dfy-autopilot-prod.fly.dev/sitemap.xml
+
+# Crawl-delay for well-behaved bots
+Crawl-delay: 1

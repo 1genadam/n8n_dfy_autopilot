@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Watch live demo of n8n DFY Autopilot: see AI-powered workflow generation, automated testing, and video creation in action">
+    <meta name="keywords" content="automation demo, workflow generation demo, AI automation, live demonstration, n8n tutorial">
+    <meta name="author" content="n8n DFY Autopilot">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Live Demo - n8n DFY Autopilot | See Automation in Action">
+    <meta property="og:description" content="Experience the complete automation pipeline from request to delivery in our interactive demo">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://n8n-autopilot.com/demo">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="n8n DFY Autopilot Live Demo">
+    <meta name="twitter:description" content="Watch AI generate, test, and deliver professional n8n workflows in minutes">
+    
+    <title>Live Demo - n8n DFY Autopilot | Interactive Workflow Generation</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/"><h2>🤖 n8n DFY Autopilot</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/features.html" class="nav-link">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/use-cases.html" class="nav-link">Use Cases</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/demo.html" class="nav-link active">Demo</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#request-form" class="nav-link btn btn-primary">Get Started</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="demo-hero">
+        <div class="container">
+            <div class="demo-hero-content">
+                <h1>Interactive Demo Experience</h1>
+                <p class="hero-subtitle">See AI-powered automation in action</p>
+                <p class="hero-description">
+                    Experience the complete automation pipeline from customer request to final delivery. Watch as our AI generates, tests, and delivers professional n8n workflows in real-time.
+                </p>
+                <div class="demo-controls">
+                    <button class="btn btn-primary btn-large" id="startDemo">
+                        <i class="fas fa-play"></i>
+                        Start Interactive Demo
+                    </button>
+                    <button class="btn btn-secondary btn-large" id="watchVideo">
+                        <i class="fas fa-video"></i>
+                        Watch Video Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section class="interactive-demo">
+        <div class="container">
+            <div class="demo-container">
+                <div class="demo-sidebar">
+                    <h3>Demo Scenarios</h3>
+                    <div class="scenario-list">
+                        <button class="scenario-item active" data-scenario="ecommerce">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div>
+                                <h4>E-commerce Order Processing</h4>
+                                <p>Automate order fulfillment workflow</p>
+                            </div>
+                        </button>
+                        <button class="scenario-item" data-scenario="crm">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>CRM Lead Management</h4>
+                                <p>Qualify and assign leads automatically</p>
+                            </div>
+                        </button>
+                        <button class="scenario-item" data-scenario="marketing">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email Marketing Campaign</h4>
+                                <p>Personalized email automation</p>
+                            </div>
+                        </button>
+                        <button class="scenario-item" data-scenario="support">
+                            <i class="fas fa-headset"></i>
+                            <div>
+                                <h4>Customer Support Tickets</h4>
+                                <p>Automated ticket routing and responses</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="demo-main">
+                    <div class="demo-stage">
+                        <div class="stage-header">
+                            <div class="stage-progress">
+                                <div class="progress-step active" data-step="1">
+                                    <span class="step-number">1</span>
+                                    <span class="step-label">Request</span>
+                                </div>
+                                <div class="progress-step" data-step="2">
+                                    <span class="step-number">2</span>
+                                    <span class="step-label">AI Generation</span>
+                                </div>
+                                <div class="progress-step" data-step="3">
+                                    <span class="step-number">3</span>
+                                    <span class="step-label">Testing</span>
+                                </div>
+                                <div class="progress-step" data-step="4">
+                                    <span class="step-number">4</span>
+                                    <span class="step-label">Video Creation</span>
+                                </div>
+                                <div class="progress-step" data-step="5">
+                                    <span class="step-number">5</span>
+                                    <span class="step-label">Delivery</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stage-content">
+                            <!-- Step 1: Customer Request -->
+                            <div class="demo-step active" id="step-1">
+                                <div class="step-content">
+                                    <h3><i class="fas fa-edit"></i> Customer Request</h3>
+                                    <p>A customer submits their automation requirements through our form.</p>
+                                    
+                                    <div class="demo-form">
+                                        <div class="form-preview">
+                                            <h4>Automation Request Form</h4>
+                                            <div class="form-field">
+                                                <label>Customer Name:</label>
+                                                <span class="field-value">Sarah Johnson</span>
+                                            </div>
+                                            <div class="form-field">
+                                                <label>Company:</label>
+                                                <span class="field-value">Fashion Forward Store</span>
+                                            </div>
+                                            <div class="form-field">
+                                                <label>Industry:</label>
+                                                <span class="field-value">E-commerce</span>
+                                            </div>
+                                            <div class="form-field">
+                                                <label>Description:</label>
+                                                <span class="field-value">
+                                                    "I need to automate our order processing. When a customer places an order on Shopify, 
+                                                    I want to automatically check inventory, process payment, create shipping labels, 
+                                                    and send tracking information to the customer."
+                                                </span>
+                                            </div>
+                                            <div class="form-field">
+                                                <label>Input Sources:</label>
+                                                <span class="field-value">Shopify Webhook, Inventory System API</span>
+                                            </div>
+                                            <div class="form-field">
+                                                <label>Output Targets:</label>
+                                                <span class="field-value">Email, Shipping Provider API, Customer Database</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="analysis-preview">
+                                            <h4>Automatic Analysis</h4>
+                                            <div class="analysis-item">
+                                                <span class="analysis-label">Estimated Complexity:</span>
+                                                <span class="analysis-value medium">Medium</span>
+                                            </div>
+                                            <div class="analysis-item">
+                                                <span class="analysis-label">Estimated Nodes:</span>
+                                                <span class="analysis-value">12</span>
+                                            </div>
+                                            <div class="analysis-item">
+                                                <span class="analysis-label">Estimated Price:</span>
+                                                <span class="analysis-value">$170</span>
+                                            </div>
+                                            <div class="analysis-item">
+                                                <span class="analysis-label">Delivery Time:</span>
+                                                <span class="analysis-value">8-10 minutes</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="nextStep()">
+                                        Submit Request <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: AI Generation -->
+                            <div class="demo-step" id="step-2">
+                                <div class="step-content">
+                                    <h3><i class="fas fa-brain"></i> AI Workflow Generation</h3>
+                                    <p>Claude AI analyzes the request and generates a complete n8n workflow.</p>
+                                    
+                                    <div class="generation-preview">
+                                        <div class="ai-thinking">
+                                            <div class="ai-avatar">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <div class="thinking-content">
+                                                <h4>Claude AI is analyzing your request...</h4>
+                                                <div class="thinking-steps">
+                                                    <div class="thinking-step completed">
+                                                        <i class="fas fa-check"></i>
+                                                        <span>Understanding requirements</span>
+                                                    </div>
+                                                    <div class="thinking-step active">
+                                                        <i class="fas fa-spinner fa-spin"></i>
+                                                        <span>Selecting optimal nodes</span>
+                                                    </div>
+                                                    <div class="thinking-step">
+                                                        <i class="fas fa-circle"></i>
+                                                        <span>Configuring connections</span>
+                                                    </div>
+                                                    <div class="thinking-step">
+                                                        <i class="fas fa-circle"></i>
+                                                        <span>Optimizing workflow</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="workflow-preview" style="display: none;">
+                                            <h4>Generated Workflow</h4>
+                                            <div class="workflow-visual">
+                                                <div class="workflow-node trigger">
+                                                    <i class="fas fa-play"></i>
+                                                    <span>Shopify Webhook</span>
+                                                </div>
+                                                <div class="workflow-arrow">→</div>
+                                                <div class="workflow-node action">
+                                                    <i class="fas fa-filter"></i>
+                                                    <span>Filter Orders</span>
+                                                </div>
+                                                <div class="workflow-arrow">→</div>
+                                                <div class="workflow-node integration">
+                                                    <i class="fas fa-database"></i>
+                                                    <span>Check Inventory</span>
+                                                </div>
+                                                <div class="workflow-arrow">→</div>
+                                                <div class="workflow-node action">
+                                                    <i class="fas fa-credit-card"></i>
+                                                    <span>Process Payment</span>
+                                                </div>
+                                                <div class="workflow-arrow">→</div>
+                                                <div class="workflow-node integration">
+                                                    <i class="fas fa-shipping-fast"></i>
+                                                    <span>Create Shipping Label</span>
+                                                </div>
+                                                <div class="workflow-arrow">→</div>
+                                                <div class="workflow-node action">
+                                                    <i class="fas fa-envelope"></i>
+                                                    <span>Send Confirmation</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="workflow-stats">
+                                                <div class="stat">
+                                                    <span class="stat-value">12</span>
+                                                    <span class="stat-label">Nodes Created</span>
+                                                </div>
+                                                <div class="stat">
+                                                    <span class="stat-value">2.3s</span>
+                                                    <span class="stat-label">Generation Time</span>
+                                                </div>
+                                                <div class="stat">
+                                                    <span class="stat-value">100%</span>
+                                                    <span class="stat-label">Valid JSON</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="nextStep()" style="display: none;" id="step2-next">
+                                        Proceed to Testing <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Automated Testing -->
+                            <div class="demo-step" id="step-3">
+                                <div class="step-content">
+                                    <h3><i class="fas fa-vial"></i> Automated Testing</h3>
+                                    <p>Playwright runs comprehensive tests to ensure the workflow functions correctly.</p>
+                                    
+                                    <div class="testing-preview">
+                                        <div class="test-console">
+                                            <div class="console-header">
+                                                <i class="fas fa-terminal"></i>
+                                                <span>Testing Console</span>
+                                                <div class="console-status running">
+                                                    <i class="fas fa-circle"></i>
+                                                    <span>Running Tests</span>
+                                                </div>
+                                            </div>
+                                            <div class="console-content">
+                                                <div class="console-line">
+                                                    <span class="timestamp">[14:32:01]</span>
+                                                    <span class="log-level info">INFO</span>
+                                                    <span class="message">Starting workflow validation tests...</span>
+                                                </div>
+                                                <div class="console-line">
+                                                    <span class="timestamp">[14:32:02]</span>
+                                                    <span class="log-level success">PASS</span>
+                                                    <span class="message">✓ JSON syntax validation</span>
+                                                </div>
+                                                <div class="console-line">
+                                                    <span class="timestamp">[14:32:03]</span>
+                                                    <span class="log-level success">PASS</span>
+                                                    <span class="message">✓ Node configuration check</span>
+                                                </div>
+                                                <div class="console-line">
+                                                    <span class="timestamp">[14:32:04]</span>
+                                                    <span class="log-level success">PASS</span>
+                                                    <span class="message">✓ Workflow deployment test</span>
+                                                </div>
+                                                <div class="console-line active">
+                                                    <span class="timestamp">[14:32:05]</span>
+                                                    <span class="log-level running">RUN</span>
+                                                    <span class="message">⏳ Executing end-to-end test...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="test-results" style="display: none;">
+                                            <h4>Test Results</h4>
+                                            <div class="test-summary">
+                                                <div class="test-metric">
+                                                    <span class="metric-value success">15/15</span>
+                                                    <span class="metric-label">Tests Passed</span>
+                                                </div>
+                                                <div class="test-metric">
+                                                    <span class="metric-value">4.2s</span>
+                                                    <span class="metric-label">Total Time</span>
+                                                </div>
+                                                <div class="test-metric">
+                                                    <span class="metric-value success">100%</span>
+                                                    <span class="metric-label">Success Rate</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="test-details">
+                                                <div class="test-category">
+                                                    <h5>Syntax & Structure Tests</h5>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>JSON schema validation</span>
+                                                        <span class="test-time">0.1s</span>
+                                                    </div>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>Node type validation</span>
+                                                        <span class="test-time">0.2s</span>
+                                                    </div>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>Connection integrity</span>
+                                                        <span class="test-time">0.3s</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="test-category">
+                                                    <h5>Functional Tests</h5>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>Webhook trigger response</span>
+                                                        <span class="test-time">1.2s</span>
+                                                    </div>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>Data transformation</span>
+                                                        <span class="test-time">0.8s</span>
+                                                    </div>
+                                                    <div class="test-item passed">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>API integrations</span>
+                                                        <span class="test-time">1.6s</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="nextStep()" style="display: none;" id="step3-next">
+                                        Create Video Tutorial <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4: Video Creation -->
+                            <div class="demo-step" id="step-4">
+                                <div class="step-content">
+                                    <h3><i class="fas fa-video"></i> Professional Video Creation</h3>
+                                    <p>AI generates a comprehensive tutorial script and creates a professional video.</p>
+                                    
+                                    <div class="video-creation-preview">
+                                        <div class="script-generation">
+                                            <h4>Script Generation</h4>
+                                            <div class="script-preview">
+                                                <div class="script-section">
+                                                    <h5>Introduction</h5>
+                                                    <p>"Welcome to this tutorial on automating e-commerce order processing with n8n. 
+                                                    In this video, we'll walk through a complete workflow that automatically handles 
+                                                    orders from Shopify, checks inventory, processes payments, and notifies customers."</p>
+                                                </div>
+                                                <div class="script-section">
+                                                    <h5>Workflow Overview</h5>
+                                                    <p>"This workflow consists of 12 nodes that work together to create a seamless 
+                                                    order processing system. Let's examine each component..."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="video-production">
+                                            <h4>Video Production Pipeline</h4>
+                                            <div class="production-steps">
+                                                <div class="production-step completed">
+                                                    <i class="fas fa-check"></i>
+                                                    <span>Script generated</span>
+                                                </div>
+                                                <div class="production-step completed">
+                                                    <i class="fas fa-check"></i>
+                                                    <span>Audio synthesized</span>
+                                                </div>
+                                                <div class="production-step active">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Video assembly</span>
+                                                </div>
+                                                <div class="production-step">
+                                                    <i class="fas fa-circle"></i>
+                                                    <span>Quality check</span>
+                                                </div>
+                                                <div class="production-step">
+                                                    <i class="fas fa-circle"></i>
+                                                    <span>YouTube upload</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="video-preview-player" style="display: none;">
+                                            <h4>Generated Tutorial Video</h4>
+                                            <div class="video-player">
+                                                <div class="video-screen">
+                                                    <i class="fas fa-play-circle"></i>
+                                                    <div class="video-info">
+                                                        <h5>E-commerce Order Processing Automation</h5>
+                                                        <p>Complete n8n workflow tutorial</p>
+                                                        <span class="video-duration">5:42</span>
+                                                    </div>
+                                                </div>
+                                                <div class="video-controls">
+                                                    <button class="play-btn">
+                                                        <i class="fas fa-play"></i>
+                                                    </button>
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 0%"></div>
+                                                    </div>
+                                                    <span class="time-display">0:00 / 5:42</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="nextStep()" style="display: none;" id="step4-next">
+                                        Complete Delivery <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 5: Delivery -->
+                            <div class="demo-step" id="step-5">
+                                <div class="step-content">
+                                    <h3><i class="fas fa-paper-plane"></i> Instant Delivery</h3>
+                                    <p>Customer receives the complete workflow package via email with all deliverables.</p>
+                                    
+                                    <div class="delivery-preview">
+                                        <div class="email-preview">
+                                            <div class="email-header">
+                                                <h4><i class="fas fa-envelope"></i> Delivery Email</h4>
+                                                <span class="email-status delivered">Delivered</span>
+                                            </div>
+                                            <div class="email-content">
+                                                <div class="email-to">
+                                                    <strong>To:</strong> sarah@fashionforward.com
+                                                </div>
+                                                <div class="email-subject">
+                                                    <strong>Subject:</strong> Your E-commerce Automation Workflow is Ready!
+                                                </div>
+                                                <div class="email-body">
+                                                    <p>Hi Sarah,</p>
+                                                    <p>Great news! Your custom e-commerce order processing workflow has been generated, tested, and is ready for deployment.</p>
+                                                    
+                                                    <div class="delivery-package">
+                                                        <h5>What's Included:</h5>
+                                                        <div class="deliverable">
+                                                            <i class="fas fa-download"></i>
+                                                            <span>n8n Workflow JSON File</span>
+                                                            <a href="#" class="download-btn">Download</a>
+                                                        </div>
+                                                        <div class="deliverable">
+                                                            <i class="fas fa-video"></i>
+                                                            <span>Tutorial Video (5:42)</span>
+                                                            <a href="#" class="view-btn">Watch on YouTube</a>
+                                                        </div>
+                                                        <div class="deliverable">
+                                                            <i class="fas fa-file-alt"></i>
+                                                            <span>Setup Instructions</span>
+                                                            <a href="#" class="download-btn">Download PDF</a>
+                                                        </div>
+                                                        <div class="deliverable">
+                                                            <i class="fas fa-chart-bar"></i>
+                                                            <span>Test Results Report</span>
+                                                            <a href="#" class="download-btn">Download</a>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="workflow-summary">
+                                                        <h5>Workflow Summary:</h5>
+                                                        <ul>
+                                                            <li>12 nodes for complete order processing</li>
+                                                            <li>Integrates with Shopify, inventory system, and shipping providers</li>
+                                                            <li>Automatic customer notifications with tracking</li>
+                                                            <li>100% test success rate</li>
+                                                            <li>Estimated 75% time savings</li>
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <p>Need help with implementation? We provide 30 days of support included with your purchase.</p>
+                                                    
+                                                    <p>Best regards,<br>
+                                                    The n8n DFY Autopilot Team</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="delivery-stats">
+                                            <h4>Delivery Metrics</h4>
+                                            <div class="stats-grid">
+                                                <div class="stat-item">
+                                                    <span class="stat-value">8m 34s</span>
+                                                    <span class="stat-label">Total Time</span>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <span class="stat-value">12</span>
+                                                    <span class="stat-label">Nodes Created</span>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <span class="stat-value">15/15</span>
+                                                    <span class="stat-label">Tests Passed</span>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <span class="stat-value">5:42</span>
+                                                    <span class="stat-label">Video Length</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="demo-complete">
+                                        <h4>🎉 Demo Complete!</h4>
+                                        <p>You've just witnessed the complete automation pipeline from request to delivery. Ready to create your own workflow?</p>
+                                        <div class="complete-actions">
+                                            <a href="/#request-form" class="btn btn-primary btn-large">
+                                                <i class="fas fa-rocket"></i>
+                                                Start Your Workflow
+                                            </a>
+                                            <button class="btn btn-secondary" onclick="restartDemo()">
+                                                <i class="fas fa-redo"></i>
+                                                Restart Demo
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Demos Section -->
+    <section class="video-demos">
+        <div class="container">
+            <h2 class="section-title">Video Demonstrations</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-play-circle"></i>
+                        <img src="/images/demo-thumbnail-1.jpg" alt="Full Platform Demo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="video-info">
+                        <h3>Complete Platform Overview</h3>
+                        <p>See the entire automation pipeline from start to finish</p>
+                        <span class="video-duration">8:32</span>
+                        <button class="btn btn-primary">Watch Demo</button>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-play-circle"></i>
+                        <img src="/images/demo-thumbnail-2.jpg" alt="AI Generation Demo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="video-info">
+                        <h3>AI Workflow Generation</h3>
+                        <p>Watch Claude AI generate complex workflows in real-time</p>
+                        <span class="video-duration">4:15</span>
+                        <button class="btn btn-primary">Watch Demo</button>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-play-circle"></i>
+                        <img src="/images/demo-thumbnail-3.jpg" alt="Testing Demo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="video-info">
+                        <h3>Automated Testing Process</h3>
+                        <p>See how Playwright ensures workflow quality and reliability</p>
+                        <span class="video-duration">6:28</span>
+                        <button class="btn btn-primary">Watch Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Stats -->
+    <section class="demo-stats">
+        <div class="container">
+            <h2>Demo Performance Metrics</h2>
+            <div class="stats-dashboard">
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <span class="stat-number">8m 34s</span>
+                    <span class="stat-label">Average Generation Time</span>
+                    <span class="stat-description">From request to complete delivery</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="stat-number">99.2%</span>
+                    <span class="stat-label">Test Success Rate</span>
+                    <span class="stat-description">Workflows pass all quality checks</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <span class="stat-number">4.9/5</span>
+                    <span class="stat-label">Customer Satisfaction</span>
+                    <span class="stat-description">Based on delivery quality ratings</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-robot"></i>
+                    <span class="stat-number">2,964+</span>
+                    <span class="stat-label">Template Library</span>
+                    <span class="stat-description">AI-powered knowledge base</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="demo-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Experience Real Automation?</h2>
+                <p>Stop watching demos and start automating. Get your first professional workflow delivered in minutes.</p>
+                <div class="cta-buttons">
+                    <a href="/#request-form" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i>
+                        Create Your First Workflow
+                    </a>
+                    <a href="/use-cases.html" class="btn btn-secondary btn-large">
+                        <i class="fas fa-lightbulb"></i>
+                        Explore Use Cases
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>🤖 n8n DFY Autopilot</h3>
+                    <p>The future of workflow automation is here - and it's automated!</p>
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="stat">
+                        <span class="stat-number">931</span>
+                        <span class="stat-label">NPM Packages</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">29</span>
+                        <span class="stat-label">API Endpoints</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">2,964+</span>
+                        <span class="stat-label">Templates</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 n8n DFY Autopilot. All rights reserved. Built with ❤️ and AI automation.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/main.js"></script>
+    <script src="/js/demo.js"></script>
+</body>
+</html>

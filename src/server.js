@@ -10,6 +10,7 @@ const { logger } = require('./utils/logger');
 const { connectDatabase } = require('./config/database');
 const { connectRedis } = require('./config/redis');
 const { setupQueues } = require('./config/queues');
+const periodicTesting = require('./services/periodicTesting');
 
 // Import route modules
 const customerRoutes = require('./routes/customer');
@@ -17,6 +18,9 @@ const workflowRoutes = require('./routes/workflow');
 const contentRoutes = require('./routes/content');
 const healthRoutes = require('./routes/health');
 const analyticsRoutes = require('./routes/analytics');
+const paymentsRoutes = require('./routes/payments');
+const supportRoutes = require('./routes/support');
+const monitoringRoutes = require('./routes/monitoring');
 
 class DFYAutopilotServer {
   constructor() {
@@ -33,6 +37,12 @@ class DFYAutopilotServer {
       
       // Setup background job queues
       await setupQueues();
+      
+      // Start periodic testing service
+      if (process.env.NODE_ENV === 'production') {
+        await periodicTesting.start();
+        logger.info('Periodic testing service started');
+      }
       
       // Configure middleware
       this.setupMiddleware();
@@ -99,11 +109,24 @@ class DFYAutopilotServer {
   }
 
   setupRoutes() {
-    // API routes
+    // API routes (versioned)
     this.app.use('/api/v1/customers', customerRoutes);
     this.app.use('/api/v1/workflows', workflowRoutes);
     this.app.use('/api/v1/content', contentRoutes);
     this.app.use('/api/v1/analytics', analyticsRoutes);
+    this.app.use('/api/v1/payments', paymentsRoutes);
+    this.app.use('/api/v1/support', supportRoutes);
+    this.app.use('/api/v1/monitoring', monitoringRoutes);
+    
+    // API routes (unversioned for backward compatibility)
+    this.app.use('/api/customers', customerRoutes);
+    this.app.use('/api/workflows', workflowRoutes);
+    this.app.use('/api/content', contentRoutes);
+    this.app.use('/api/analytics', analyticsRoutes);
+    this.app.use('/api/payments', paymentsRoutes);
+    this.app.use('/api/support', supportRoutes);
+    this.app.use('/api/monitoring', monitoringRoutes);
+    
     this.app.use('/health', healthRoutes);
 
     // Root route
@@ -126,6 +149,7 @@ class DFYAutopilotServer {
           workflows: '/api/v1/workflows',
           content: '/api/v1/content',
           analytics: '/api/v1/analytics',
+          payments: '/api/v1/payments',
           health: '/health'
         }
       });
@@ -137,10 +161,16 @@ class DFYAutopilotServer {
         error: 'Endpoint not found',
         message: `The endpoint ${req.method} ${req.originalUrl} does not exist.`,
         availableEndpoints: [
+          '/api/customers',
+          '/api/workflows', 
+          '/api/content',
+          '/api/analytics',
+          '/api/monitoring',
           '/api/v1/customers',
           '/api/v1/workflows',
           '/api/v1/content',
           '/api/v1/analytics',
+          '/api/v1/monitoring',
           '/health'
         ]
       });
@@ -236,6 +266,12 @@ class DFYAutopilotServer {
           await closeDatabase();
           await closeRedis();
           await closeQueues();
+          
+          // Stop periodic testing service
+          if (periodicTesting.isRunning) {
+            await periodicTesting.stop();
+            logger.info('Periodic testing service stopped');
+          }
           
           logger.info('All connections closed. Exiting process.');
           process.exit(0);

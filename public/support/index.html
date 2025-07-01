@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center - n8n DFY Autopilot</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .support-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .support-header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+        .search-bar {
+            margin-bottom: 30px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .faq-category {
+            margin-bottom: 30px;
+        }
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        .faq-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 15px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+        .faq-answer {
+            padding: 15px;
+            background: white;
+            display: none;
+            line-height: 1.6;
+        }
+        .faq-answer.active {
+            display: block;
+        }
+        .faq-toggle {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+        .contact-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .quick-links {
+            list-style: none;
+            padding: 0;
+        }
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+        .quick-links a {
+            color: #007bff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .quick-links a:hover {
+            background: #f8f9fa;
+        }
+        .live-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 50px;
+            padding: 15px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+        }
+        .live-chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="support-container">
+        <!-- Support Header -->
+        <div class="support-header">
+            <h1>Support Center</h1>
+            <p>Get help with your n8n workflow automation projects</p>
+        </div>
+
+        <!-- Main Support Grid -->
+        <div class="support-grid">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <input type="text" 
+                           class="search-input" 
+                           id="searchInput" 
+                           placeholder="Search for help articles, FAQs, and tutorials..."
+                           onkeyup="searchContent()">
+                </div>
+
+                <!-- FAQ Categories -->
+                <div id="faqContent">
+                    <!-- Getting Started -->
+                    <div class="faq-category">
+                        <h2 class="category-title">Getting Started</h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How do I submit a workflow request?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>To submit a workflow request:</p>
+                                <ol>
+                                    <li>Visit our homepage and scroll to the request form</li>
+                                    <li>Fill in your contact information (name, email, company)</li>
+                                    <li>Describe your automation needs in detail</li>
+                                    <li>Specify input sources and output targets</li>
+                                    <li>Choose your preferred frequency and complexity level</li>
+                                    <li>Submit the form and receive a price quote via email</li>
+                                </ol>
+                                <p>Our AI will analyze your requirements and provide an estimated price and timeline within minutes.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How long does workflow generation take?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Our automated workflow generation process typically takes:</p>
+                                <ul>
+                                    <li><strong>Simple workflows:</strong> 5-10 minutes</li>
+                                    <li><strong>Medium complexity:</strong> 10-20 minutes</li>
+                                    <li><strong>Complex workflows:</strong> 20-45 minutes</li>
+                                </ul>
+                                <p>This includes AI generation, automated testing, and video tutorial creation. You'll receive email notifications at each stage of the process.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                What's included with my workflow?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Every workflow delivery includes:</p>
+                                <ul>
+                                    <li>Complete n8n workflow JSON file</li>
+                                    <li>Automated testing report</li>
+                                    <li>Professional video tutorial</li>
+                                    <li>Setup and configuration instructions</li>
+                                    <li>YouTube tutorial link</li>
+                                    <li>30-day support for questions</li>
+                                </ul>
+                                <p>All files are delivered via email with download links.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment & Billing -->
+                    <div class="faq-category">
+                        <h2 class="category-title">Payment & Billing</h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How is pricing calculated?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Our pricing is based on workflow complexity:</p>
+                                <ul>
+                                    <li><strong>Base price:</strong> $50 for all workflows</li>
+                                    <li><strong>Simple workflows:</strong> $50 base + $5 per input/output</li>
+                                    <li><strong>Medium complexity:</strong> $50 base + $10 per input/output</li>
+                                    <li><strong>Complex workflows:</strong> $50 base + $20 per input/output</li>
+                                </ul>
+                                <p>Our AI analyzes your requirements and provides an exact quote before you pay.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                What payment methods do you accept?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We accept all major payment methods through Stripe:</p>
+                                <ul>
+                                    <li>Credit and debit cards (Visa, MasterCard, American Express)</li>
+                                    <li>PayPal</li>
+                                    <li>Apple Pay and Google Pay</li>
+                                    <li>Bank transfers (for enterprise customers)</li>
+                                </ul>
+                                <p>All payments are processed securely with SSL encryption.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Do you offer refunds?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We offer a satisfaction guarantee:</p>
+                                <ul>
+                                    <li>Full refund if we can't deliver a working workflow</li>
+                                    <li>Free revisions if the workflow doesn't meet your specifications</li>
+                                    <li>30-day support included with every purchase</li>
+                                </ul>
+                                <p>Contact our support team if you're not satisfied with your workflow.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Support -->
+                    <div class="faq-category">
+                        <h2 class="category-title">Technical Support</h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How do I install my workflow in n8n?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>To install your workflow in n8n:</p>
+                                <ol>
+                                    <li>Open your n8n instance</li>
+                                    <li>Click "Import from JSON" in the workflow editor</li>
+                                    <li>Upload the workflow file we provided</li>
+                                    <li>Configure any required credentials (API keys, OAuth)</li>
+                                    <li>Test the workflow with sample data</li>
+                                    <li>Activate the workflow when ready</li>
+                                </ol>
+                                <p>Watch our included video tutorial for step-by-step guidance.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                What if my workflow doesn't work?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>All workflows are tested before delivery, but if you encounter issues:</p>
+                                <ol>
+                                    <li>Check that all required credentials are configured</li>
+                                    <li>Verify input data format matches the workflow requirements</li>
+                                    <li>Review the testing report for any special notes</li>
+                                    <li>Contact our support team with error details</li>
+                                </ol>
+                                <p>We provide free troubleshooting and fixes for 30 days after delivery.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Can you customize my workflow after delivery?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! We offer post-delivery customization:</p>
+                                <ul>
+                                    <li>Minor adjustments included in 30-day support</li>
+                                    <li>Major modifications available as new requests</li>
+                                    <li>Enterprise customers get extended customization</li>
+                                    <li>All changes include updated testing and documentation</li>
+                                </ul>
+                                <p>Contact support to discuss your customization needs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account & Dashboard -->
+                    <div class="faq-category">
+                        <h2 class="category-title">Account & Dashboard</h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How do I access my customer dashboard?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Access your dashboard by:</p>
+                                <ol>
+                                    <li>Visiting /dashboard.html on our website</li>
+                                    <li>Entering the email address used for your requests</li>
+                                    <li>Viewing all your workflow requests and their status</li>
+                                    <li>Downloading completed workflows and tutorials</li>
+                                </ol>
+                                <p>Your dashboard shows real-time status updates for all requests.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Can I download my files again later?
+                                <span class="faq-toggle">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! All your files are available for download:</p>
+                                <ul>
+                                    <li>Access your customer dashboard anytime</li>
+                                    <li>Download workflows, videos, and documentation</li>
+                                    <li>Files are stored permanently for your account</li>
+                                    <li>Get direct links to YouTube tutorials</li>
+                                </ul>
+                                <p>We recommend bookmarking your dashboard for easy access.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h3>Still need help? Contact our support team</h3>
+                    <form id="supportForm" onsubmit="submitSupportTicket(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name *</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="category">Category *</label>
+                            <select id="category" name="category" class="form-input" required>
+                                <option value="">Select a category</option>
+                                <option value="technical">Technical Issue</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="workflow">Workflow Request</option>
+                                <option value="general">General Inquiry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message *</label>
+                            <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>Quick Links</h3>
+                <ul class="quick-links">
+                    <li><a href="/dashboard.html">📊 Customer Dashboard</a></li>
+                    <li><a href="/#request-form">📝 Submit New Request</a></li>
+                    <li><a href="/support/tutorials.html">🎥 Video Tutorials</a></li>
+                    <li><a href="/support/api-docs.html">📚 API Documentation</a></li>
+                    <li><a href="mailto:support@n8n-autopilot.com">✉️ Email Support</a></li>
+                </ul>
+
+                <hr style="margin: 20px 0;">
+
+                <h3>Support Status</h3>
+                <p>
+                    <span class="status-badge status-online">● Online</span><br>
+                    <small>Average response time: 2 hours</small>
+                </p>
+
+                <hr style="margin: 20px 0;">
+
+                <h3>Popular Articles</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 8px;">
+                        <a href="#" style="color: #007bff; text-decoration: none; font-size: 14px;">
+                            Setting up n8n credentials
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 8px;">
+                        <a href="#" style="color: #007bff; text-decoration: none; font-size: 14px;">
+                            Common workflow patterns
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 8px;">
+                        <a href="#" style="color: #007bff; text-decoration: none; font-size: 14px;">
+                            Troubleshooting API connections
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 8px;">
+                        <a href="#" style="color: #007bff; text-decoration: none; font-size: 14px;">
+                            Workflow scheduling tips
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chat Widget -->
+    <div class="live-chat" onclick="openLiveChat()">
+        💬 Chat with us
+    </div>
+
+    <script>
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const toggle = element.querySelector('.faq-toggle');
+            
+            answer.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+        function searchContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+        }
+
+        async function submitSupportTicket(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const ticketData = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/api/v1/support/tickets', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(ticketData)
+                });
+                
+                if (response.ok) {
+                    alert('Support ticket submitted successfully! We\'ll get back to you within 24 hours.');
+                    event.target.reset();
+                } else {
+                    throw new Error('Failed to submit ticket');
+                }
+            } catch (error) {
+                console.error('Error submitting ticket:', error);
+                alert('Failed to submit ticket. Please try again or email us directly at support@n8n-autopilot.com');
+            }
+        }
+
+        function openLiveChat() {
+            // This would integrate with a live chat service like Intercom, Zendesk Chat, etc.
+            alert('Live chat coming soon! Please use the contact form or email support@n8n-autopilot.com for immediate assistance.');
+        }
+
+        // Auto-expand FAQ if linked with hash
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            if (hash) {
+                const target = document.querySelector(hash);
+                if (target && target.classList.contains('faq-question')) {
+                    toggleFaq(target);
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+    <!-- Homepage -->
+    <url>
+        <loc>https://n8n-dfy-autopilot-prod.fly.dev/</loc>
+        <lastmod>2025-07-01</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- About Page -->
+    <url>
+        <loc>https://n8n-dfy-autopilot-prod.fly.dev/about.html</loc>
+        <lastmod>2025-07-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Features Page -->
+    <url>
+        <loc>https://n8n-dfy-autopilot-prod.fly.dev/features.html</loc>
+        <lastmod>2025-07-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Use Cases Page -->
+    <url>
+        <loc>https://n8n-dfy-autopilot-prod.fly.dev/use-cases.html</loc>
+        <lastmod>2025-07-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Demo Page -->
+    <url>
+        <loc>https://n8n-dfy-autopilot-prod.fly.dev/demo.html</loc>
+        <lastmod>2025-07-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+</urlset>

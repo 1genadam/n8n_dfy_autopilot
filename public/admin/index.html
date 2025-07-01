@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - n8n DFY Autopilot</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .admin-nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #374151;
+        }
+        .nav-tab:hover, .nav-tab.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3b82f6;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1f2937;
+            display: block;
+        }
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .stat-change {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .stat-positive { color: #10b981; }
+        .stat-negative { color: #ef4444; }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .table-header {
+            background: #f9fafb;
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+        }
+        .table-content {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-processing { background: #dbeafe; color: #1e40af; }
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-failed { background: #fee2e2; color: #991b1b; }
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        .btn-export {
+            background: #10b981;
+            color: white;
+        }
+        .btn-export:hover {
+            background: #059669;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        .metric-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .comparison-item {
+            text-align: center;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 5px;
+        }
+        .comparison-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        .comparison-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .admin-nav {
+                flex-direction: column;
+            }
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <p>Business Analytics & Reporting for n8n DFY Autopilot</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="admin-nav">
+            <div class="nav-tab active" onclick="showTab('overview')">Overview</div>
+            <div class="nav-tab" onclick="showTab('customers')">Customers</div>
+            <div class="nav-tab" onclick="showTab('workflows')">Workflows</div>
+            <div class="nav-tab" onclick="showTab('revenue')">Revenue</div>
+            <div class="nav-tab" onclick="showTab('support')">Support</div>
+            <div class="nav-tab" onclick="showTab('email')">Email</div>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- Key Metrics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="totalRequests">-</span>
+                    <div class="stat-label">Total Requests</div>
+                    <div class="stat-change" id="requestsChange">-</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="totalRevenue">$-</span>
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-change" id="revenueChange">-</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="conversionRate">-%</span>
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-change" id="conversionChange">-</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="activeWorkflows">-</span>
+                    <div class="stat-label">Active Workflows</div>
+                    <div class="stat-change" id="workflowsChange">-</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Requests Over Time</h3>
+                    <canvas id="requestsChart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Request Status Distribution</h3>
+                    <canvas id="statusChart" width="300" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="data-table">
+                <div class="table-header">Recent Customer Requests</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentRequestsTable">
+                            <tr><td colspan="6" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Tab -->
+        <div id="customers" class="tab-content">
+            <div class="filters">
+                <div class="filter-group">
+                    <div class="filter-label">Date Range</div>
+                    <select class="filter-input" id="customerDateRange">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                        <option value="365">Last year</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-label">Industry</div>
+                    <select class="filter-input" id="industryFilter">
+                        <option value="">All Industries</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="filterCustomers()">Apply Filters</button>
+                <button class="btn btn-export" onclick="exportCustomers()">Export CSV</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="totalCustomers">-</span>
+                    <div class="stat-label">Total Customers</div>
+                    <div class="metric-comparison">
+                        <div class="comparison-item">
+                            <div class="comparison-value" id="newCustomers">-</div>
+                            <div class="comparison-label">New This Month</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-value" id="returningCustomers">-</div>
+                            <div class="comparison-label">Returning</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="avgOrderValue">$-</span>
+                    <div class="stat-label">Average Order Value</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="customerLifetimeValue">$-</span>
+                    <div class="stat-label">Customer Lifetime Value</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="customerSatisfaction">-%</span>
+                    <div class="stat-label">Customer Satisfaction</div>
+                </div>
+            </div>
+
+            <div class="data-table">
+                <div class="table-header">Customer Analysis</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Industry</th>
+                                <th>Requests</th>
+                                <th>Total Spent</th>
+                                <th>Last Active</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTable">
+                            <tr><td colspan="7" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflows Tab -->
+        <div id="workflows" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="totalWorkflowsGenerated">-</span>
+                    <div class="stat-label">Total Workflows Generated</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="avgGenerationTime">- min</span>
+                    <div class="stat-label">Avg Generation Time</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="successRate">-%</span>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="popularComplexity">-</span>
+                    <div class="stat-label">Most Popular Complexity</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Workflow Complexity Distribution</h3>
+                    <canvas id="complexityChart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Generation Time Trends</h3>
+                    <canvas id="generationTimeChart" width="300" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Tab -->
+        <div id="revenue" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="monthlyRevenue">$-</span>
+                    <div class="stat-label">This Month's Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="yearlyRevenue">$-</span>
+                    <div class="stat-label">This Year's Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="avgTransactionValue">$-</span>
+                    <div class="stat-label">Avg Transaction Value</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="revenueGrowth">-%</span>
+                    <div class="stat-label">Revenue Growth (MoM)</div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Revenue Trends</h3>
+                <canvas id="revenueChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+
+        <!-- Support Tab -->
+        <div id="support" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="openTickets">-</span>
+                    <div class="stat-label">Open Tickets</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="avgResponseTime">- hrs</span>
+                    <div class="stat-label">Avg Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="resolutionRate">-%</span>
+                    <div class="stat-label">Resolution Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="customerSatisfactionSupport">-%</span>
+                    <div class="stat-label">Support Satisfaction</div>
+                </div>
+            </div>
+
+            <div class="data-table">
+                <div class="table-header">Recent Support Tickets</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Customer</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supportTicketsTable">
+                            <tr><td colspan="7" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Tab -->
+        <div id="email" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="emailsSent">-</span>
+                    <div class="stat-label">Emails Sent (30 days)</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="emailDeliveryRate">-%</span>
+                    <div class="stat-label">Delivery Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="emailOpenRate">-%</span>
+                    <div class="stat-label">Open Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="emailClickRate">-%</span>
+                    <div class="stat-label">Click Rate</div>
+                </div>
+            </div>
+
+            <div class="data-table">
+                <div class="table-header">Email Automation Performance</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rule</th>
+                                <th>Template</th>
+                                <th>Scheduled</th>
+                                <th>Sent</th>
+                                <th>Failed</th>
+                                <th>Delivery Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emailAutomationTable">
+                            <tr><td colspan="6" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+        let currentData = {};
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            setInterval(refreshData, 60000); // Refresh every minute
+        });
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load tab-specific data
+            loadTabData(tabName);
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                await Promise.all([
+                    loadOverviewData(),
+                    loadRecentRequests(),
+                ]);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showAlert('Failed to load dashboard data', 'error');
+            }
+        }
+
+        // Load overview data
+        async function loadOverviewData() {
+            try {
+                const response = await fetch('/api/v1/analytics/dashboard-overview');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateOverviewStats(data);
+                    createOverviewCharts(data);
+                } else {
+                    throw new Error(data.message || 'Failed to load overview data');
+                }
+            } catch (error) {
+                console.error('Error loading overview data:', error);
+                // Use mock data for demonstration
+                loadMockOverviewData();
+            }
+        }
+
+        // Load mock data for demonstration
+        function loadMockOverviewData() {
+            const mockData = {
+                totalRequests: 157,
+                totalRevenue: 18450,
+                conversionRate: 68.5,
+                activeWorkflows: 89,
+                requestsChange: '+12.5%',
+                revenueChange: '+8.3%',
+                conversionChange: '+3.2%',
+                workflowsChange: '+15.7%',
+                requestsOverTime: [
+                    { date: '2024-06-01', count: 12 },
+                    { date: '2024-06-02', count: 15 },
+                    { date: '2024-06-03', count: 18 },
+                    { date: '2024-06-04', count: 22 },
+                    { date: '2024-06-05', count: 19 },
+                    { date: '2024-06-06', count: 25 },
+                    { date: '2024-06-07', count: 28 },
+                ],
+                statusDistribution: {
+                    pending: 23,
+                    processing: 34,
+                    completed: 89,
+                    failed: 11
+                }
+            };
+            
+            updateOverviewStats(mockData);
+            createOverviewCharts(mockData);
+        }
+
+        // Update overview statistics
+        function updateOverviewStats(data) {
+            document.getElementById('totalRequests').textContent = data.totalRequests || 0;
+            document.getElementById('totalRevenue').textContent = '$' + (data.totalRevenue || 0).toLocaleString();
+            document.getElementById('conversionRate').textContent = (data.conversionRate || 0) + '%';
+            document.getElementById('activeWorkflows').textContent = data.activeWorkflows || 0;
+            
+            // Update change indicators
+            updateChangeIndicator('requestsChange', data.requestsChange);
+            updateChangeIndicator('revenueChange', data.revenueChange);
+            updateChangeIndicator('conversionChange', data.conversionChange);
+            updateChangeIndicator('workflowsChange', data.workflowsChange);
+        }
+
+        // Update change indicator
+        function updateChangeIndicator(elementId, change) {
+            const element = document.getElementById(elementId);
+            if (element && change) {
+                element.textContent = change;
+                element.className = 'stat-change ' + (change.startsWith('+') ? 'stat-positive' : 'stat-negative');
+            }
+        }
+
+        // Create overview charts
+        function createOverviewCharts(data) {
+            // Requests over time chart
+            const requestsCtx = document.getElementById('requestsChart').getContext('2d');
+            if (charts.requests) charts.requests.destroy();
+            
+            charts.requests = new Chart(requestsCtx, {
+                type: 'line',
+                data: {
+                    labels: data.requestsOverTime?.map(item => new Date(item.date).toLocaleDateString()) || [],
+                    datasets: [{
+                        label: 'Requests',
+                        data: data.requestsOverTime?.map(item => item.count) || [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Status distribution chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            if (charts.status) charts.status.destroy();
+            
+            charts.status = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Processing', 'Completed', 'Failed'],
+                    datasets: [{
+                        data: [
+                            data.statusDistribution?.pending || 0,
+                            data.statusDistribution?.processing || 0,
+                            data.statusDistribution?.completed || 0,
+                            data.statusDistribution?.failed || 0
+                        ],
+                        backgroundColor: [
+                            '#fbbf24',
+                            '#3b82f6',
+                            '#10b981',
+                            '#ef4444'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load recent requests
+        async function loadRecentRequests() {
+            try {
+                // Mock data for demonstration
+                const recentRequests = [
+                    {
+                        id: 157,
+                        customer_name: 'John Smith',
+                        customer_email: 'john@example.com',
+                        automation_description: 'Customer onboarding automation for SaaS platform',
+                        status: 'completed',
+                        estimated_price: 150,
+                        created_at: '2024-07-01T10:30:00Z'
+                    },
+                    {
+                        id: 156,
+                        customer_name: 'Sarah Johnson',
+                        customer_email: 'sarah@techcorp.com',
+                        automation_description: 'E-commerce order processing workflow',
+                        status: 'processing',
+                        estimated_price: 220,
+                        created_at: '2024-07-01T09:15:00Z'
+                    },
+                    {
+                        id: 155,
+                        customer_name: 'Mike Wilson',
+                        customer_email: 'mike@startup.io',
+                        automation_description: 'Social media posting automation',
+                        status: 'pending',
+                        estimated_price: 80,
+                        created_at: '2024-07-01T08:45:00Z'
+                    }
+                ];
+
+                updateRecentRequestsTable(recentRequests);
+            } catch (error) {
+                console.error('Error loading recent requests:', error);
+            }
+        }
+
+        // Update recent requests table
+        function updateRecentRequestsTable(requests) {
+            const tableBody = document.getElementById('recentRequestsTable');
+            
+            if (requests.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="loading">No recent requests</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = requests.map(request => `
+                <tr>
+                    <td>#${request.id}</td>
+                    <td>
+                        <div>${request.customer_name}</div>
+                        <div style="font-size: 12px; color: #6b7280;">${request.customer_email}</div>
+                    </td>
+                    <td>
+                        <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${request.automation_description}">
+                            ${request.automation_description}
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-${request.status}">${request.status}</span></td>
+                    <td>$${request.estimated_price}</td>
+                    <td>${new Date(request.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Load tab-specific data
+        function loadTabData(tabName) {
+            switch (tabName) {
+                case 'customers':
+                    loadCustomersData();
+                    break;
+                case 'workflows':
+                    loadWorkflowsData();
+                    break;
+                case 'revenue':
+                    loadRevenueData();
+                    break;
+                case 'support':
+                    loadSupportData();
+                    break;
+                case 'email':
+                    loadEmailData();
+                    break;
+            }
+        }
+
+        // Load customers data
+        function loadCustomersData() {
+            // Mock implementation - replace with real API calls
+            document.getElementById('totalCustomers').textContent = '89';
+            document.getElementById('newCustomers').textContent = '12';
+            document.getElementById('returningCustomers').textContent = '23';
+            document.getElementById('avgOrderValue').textContent = '$145';
+            document.getElementById('customerLifetimeValue').textContent = '$340';
+            document.getElementById('customerSatisfaction').textContent = '94%';
+        }
+
+        // Load workflows data
+        function loadWorkflowsData() {
+            document.getElementById('totalWorkflowsGenerated').textContent = '134';
+            document.getElementById('avgGenerationTime').textContent = '8.5';
+            document.getElementById('successRate').textContent = '96.2%';
+            document.getElementById('popularComplexity').textContent = 'Medium';
+        }
+
+        // Load revenue data
+        function loadRevenueData() {
+            document.getElementById('monthlyRevenue').textContent = '$12,450';
+            document.getElementById('yearlyRevenue').textContent = '$89,320';
+            document.getElementById('avgTransactionValue').textContent = '$165';
+            document.getElementById('revenueGrowth').textContent = '+18.5%';
+        }
+
+        // Load support data
+        function loadSupportData() {
+            document.getElementById('openTickets').textContent = '7';
+            document.getElementById('avgResponseTime').textContent = '2.3';
+            document.getElementById('resolutionRate').textContent = '91%';
+            document.getElementById('customerSatisfactionSupport').textContent = '89%';
+        }
+
+        // Load email data
+        function loadEmailData() {
+            document.getElementById('emailsSent').textContent = '1,247';
+            document.getElementById('emailDeliveryRate').textContent = '98.5%';
+            document.getElementById('emailOpenRate').textContent = '34.2%';
+            document.getElementById('emailClickRate').textContent = '12.8%';
+        }
+
+        // Export functions
+        function exportCustomers() {
+            window.open('/api/v1/analytics/export/customers?format=csv', '_blank');
+        }
+
+        // Utility functions
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            document.querySelector('.admin-container').insertBefore(
+                alertDiv, 
+                document.querySelector('.admin-nav')
+            );
+            
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        function refreshData() {
+            loadDashboardData();
+        }
+
+        // Filter functions
+        function filterCustomers() {
+            const dateRange = document.getElementById('customerDateRange').value;
+            const industry = document.getElementById('industryFilter').value;
+            
+            // Implement filtering logic here
+            console.log('Filtering customers:', { dateRange, industry });
+        }
+    </script>
+</body>
+</html>
