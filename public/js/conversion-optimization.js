@@ -341,12 +341,12 @@ function showExitIntentOffer() {
     modal.className = 'exit-intent-modal';
     modal.innerHTML = `
         <div class="exit-intent-content">
+            <button class="close-btn" type="button">×</button>
             <h3>Wait! Don't Leave Empty-Handed</h3>
             <p>Get a free workflow consultation call worth $200</p>
-            <button class="btn btn-primary" onclick="this.parentElement.parentElement.remove()">
+            <button class="btn btn-primary claim-btn" type="button">
                 Claim Free Consultation
             </button>
-            <button class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
         </div>
     `;
     
@@ -361,13 +361,106 @@ function showExitIntentOffer() {
         align-items: center;
         justify-content: center;
         z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     `;
+    
+    // Add styles for the content
+    const content = modal.querySelector('.exit-intent-content');
+    content.style.cssText = `
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        max-width: 400px;
+        margin: 1rem;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    `;
+    
+    // Style the close button
+    const closeBtn = modal.querySelector('.close-btn');
+    closeBtn.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    `;
+    
+    // Add hover effect to close button
+    closeBtn.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = '#f0f0f0';
+        this.style.color = '#333';
+    });
+    
+    closeBtn.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = 'transparent';
+        this.style.color = '#666';
+    });
+    
+    // Close modal function
+    function closeModal() {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.parentNode.removeChild(modal);
+            }
+        }, 300);
+        trackEvent('exit_intent_closed');
+    }
+    
+    // Add event listeners
+    closeBtn.addEventListener('click', closeModal);
+    
+    // Close when clicking outside the content
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Handle claim button
+    const claimBtn = modal.querySelector('.claim-btn');
+    claimBtn.addEventListener('click', function() {
+        trackEvent('exit_intent_claim_clicked');
+        // Scroll to the form
+        const form = document.getElementById('request-form');
+        if (form) {
+            closeModal();
+            setTimeout(() => {
+                form.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+    });
+    
+    // Close with Escape key
+    function handleEscape(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    }
+    document.addEventListener('keydown', handleEscape);
     
     document.body.appendChild(modal);
     
+    // Show the modal
     setTimeout(() => {
         modal.style.opacity = '1';
     }, 100);
+    
+    trackEvent('exit_intent_shown');
 }
 
 // Initialize exit intent after a delay
