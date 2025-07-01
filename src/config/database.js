@@ -67,7 +67,7 @@ const createTables = async () => {
     await client.query(`
       CREATE TABLE IF NOT EXISTS workflows (
         id SERIAL PRIMARY KEY,
-        request_id INTEGER REFERENCES customer_requests(id) ON DELETE CASCADE,
+        customer_request_id INTEGER REFERENCES customer_requests(id) ON DELETE CASCADE,
         name VARCHAR(255) NOT NULL,
         description TEXT,
         n8n_json JSONB NOT NULL,
@@ -111,12 +111,41 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         event_type VARCHAR(50) NOT NULL,
         event_data JSONB,
-        request_id INTEGER REFERENCES customer_requests(id) ON DELETE SET NULL,
         workflow_id INTEGER REFERENCES workflows(id) ON DELETE SET NULL,
-        content_id INTEGER REFERENCES content_items(id) ON DELETE SET NULL,
-        user_agent TEXT,
-        ip_address INET,
+        customer_request_id INTEGER REFERENCES customer_requests(id) ON DELETE SET NULL,
+        user_id VARCHAR(100),
+        session_id VARCHAR(100),
+        metadata JSONB,
+        timestamp TIMESTAMP NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // Workflow metrics aggregation table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS workflow_metrics (
+        id SERIAL PRIMARY KEY,
+        workflow_id INTEGER REFERENCES workflows(id) ON DELETE CASCADE,
+        event_type VARCHAR(50) NOT NULL,
+        event_count INTEGER DEFAULT 0,
+        date DATE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(workflow_id, event_type, date)
+      );
+    `);
+
+    // Customer metrics aggregation table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS customer_metrics (
+        id SERIAL PRIMARY KEY,
+        customer_request_id INTEGER REFERENCES customer_requests(id) ON DELETE CASCADE,
+        event_type VARCHAR(50) NOT NULL,
+        event_count INTEGER DEFAULT 0,
+        date DATE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(customer_request_id, event_type, date)
       );
     `);
 
@@ -134,12 +163,16 @@ const createTables = async () => {
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_customer_requests_status ON customer_requests(status);
       CREATE INDEX IF NOT EXISTS idx_customer_requests_created_at ON customer_requests(created_at);
-      CREATE INDEX IF NOT EXISTS idx_workflows_request_id ON workflows(request_id);
+      CREATE INDEX IF NOT EXISTS idx_workflows_customer_request_id ON workflows(customer_request_id);
       CREATE INDEX IF NOT EXISTS idx_workflows_test_status ON workflows(test_status);
       CREATE INDEX IF NOT EXISTS idx_content_items_workflow_id ON content_items(workflow_id);
       CREATE INDEX IF NOT EXISTS idx_content_items_type ON content_items(type);
       CREATE INDEX IF NOT EXISTS idx_analytics_events_type ON analytics_events(event_type);
-      CREATE INDEX IF NOT EXISTS idx_analytics_events_created_at ON analytics_events(created_at);
+      CREATE INDEX IF NOT EXISTS idx_analytics_events_timestamp ON analytics_events(timestamp);
+      CREATE INDEX IF NOT EXISTS idx_analytics_events_workflow_id ON analytics_events(workflow_id);
+      CREATE INDEX IF NOT EXISTS idx_analytics_events_customer_request_id ON analytics_events(customer_request_id);
+      CREATE INDEX IF NOT EXISTS idx_workflow_metrics_date ON workflow_metrics(date);
+      CREATE INDEX IF NOT EXISTS idx_customer_metrics_date ON customer_metrics(date);
     `);
 
     // Insert default system config
